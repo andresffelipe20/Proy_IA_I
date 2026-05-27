@@ -18,6 +18,36 @@ El *dataset* final describe el comportamiento estadístico de cada moneda en ven
 ## 1. Construcción de la Base de Datos y Preprocesamiento
 La base de datos se construyó utilizando la API de **Exness**, calculando la fuerza relativa de las 8 monedas más relevantes del mercado. Los datos secuenciales se analizaron y agruparon para eliminar la dependencia temporal, permitiendo construir variables que describieran los comportamientos no lineales inherentes a la naturaleza de los datos.
 
+
+#  Formación dataset
+
+1. Extracción de pares de divisas desde API de MT5 con python. Se tomaron 28 pares de divisas de las 8 monedas relevantes (USD,EUR,GBP,CAD,NZD,CHF,JPY,AUD). Cada par de divisa contenia 99999x8  (cierre,apertura,max,min,volumen,volumen_real,spread,fecha)
+
+2. Se reconstruyeron las monedas sinteticas segun la interaccion del mercado global (28 monedas) para tener los datos de cada divisa por separado. cada dataset contiene 99999x7 (valor_relativo,cierre,apertura,max,min,volumen )
+
+USD_rec.csv
+EUR_rec.csv
+GBP_rec.csv
+JPY_rec.csv
+AUD_rec.csv
+CAD_rec.csv
+CHF_rec.csv
+NZD_rec.csv
+
+3. Se unificaron en un unico dataset donde se agruparon las estadisticas en conjuntos por pais. cada elemento cuenta con estadisticas correspondientes a cada dia.
+
+4. Los datos secuenciales se analizaron y agruparon para eliminar dependencia temporal y construir variables que permitieran describir comportamientos no lineales comunes de la naturaleza de los datos. Como: 
+
+- Tendencia
+- Volatilidad
+- Persistencia temporal 
+- Actividad de mercado
+- Estructura del movimiento
+
+
+download_url = f"https://drive.google.com/uc?export=download&id 1KM9i4yegggk-WaHAeK1LXxzRmqyXxZGJ"
+
+
 ### Características del Dataset:
 * **Volumen:** ~8,500 registros.
 * **Dimensiones:** 11 variables predictoras.
@@ -34,6 +64,23 @@ El *dataset* presenta un marcado desbalanceo de clases, distribuido de la siguie
 | **Clase 3** | Fixed Peg | 1.93% |
 
 ---
+### Variables Utilizadas
+
+Aquí se detallan las 11 variables calculadas y utilizadas para capturar los comportamientos estadísticos y no lineales de las divisas:
+
+| Variable | Descripción |
+| :--- | :--- |
+| **vol_mean_30** | Media de la volatilidad en una ventana de 30 períodos. |
+| **vol_std_30** | Desviación estándar de la volatilidad en 30 períodos. |
+| **trend_mean_30** | Media de la tendencia en una ventana de 30 períodos. |
+| **autocorr_mean_30** | Media de la autocorrelación en 30 períodos. |
+| **autocorr_std_30** | Desviación estándar de la autocorrelación en 30 períodos. |
+| **trend_persistence_30** | Persistencia de la tendencia en 30 períodos. |
+| **autocorr_decay** | Tasa de decaimiento de la autocorrelación. |
+| **max_drawdown** | Máxima reducción de precios (*Maximum Drawdown*). |
+| **autocorr_sign** | Signo de la autocorrelación. |
+| **autocorr_sign_change** | Cambios de signo en la autocorrelación. |
+| **autocorr_instability** | Inestabilidad de la autocorrelación. |
 
 ## 2. Modelos Supervisados Implementados
 
@@ -76,3 +123,4 @@ Con el objetivo de explorar la estructura intrínseca de los datos sin etiquetas
 * **Reducción de Dimensionalidad (PCA):** Se utilizó el método PCA para aplanar las dimensiones del *dataset* a 2. Tras la reducción, la estructura visual de los datos parece poco diferenciable y sin presencia de patrones evidentes, lo que dificulta el uso de métodos no supervisados.
 * **K-Means:** Al intentar agrupar los datos en 4 sectores, el método del codo (*Elbow Method*) sugirió de manera consistente que el número óptimo de clústeres ($K$) es de **3**.
 * **DBSCAN:** Debido a la dispersión y falta de separación clara, el algoritmo no logró detectar patrones de densidad ni fronteras lógicas, clasificando casi la totalidad de la base de datos dentro de una única gran clase.
+
