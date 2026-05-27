@@ -124,3 +124,5 @@ Con el objetivo de explorar la estructura intrínseca de los datos sin etiquetas
 * **K-Means:** Al intentar agrupar los datos en 4 sectores, el método del codo (*Elbow Method*) sugirió de manera consistente que el número óptimo de clústeres ($K$) es de **3**.
 * **DBSCAN:** Debido a la dispersión y falta de separación clara, el algoritmo no logró detectar patrones de densidad ni fronteras lógicas, clasificando casi la totalidad de la base de datos dentro de una única gran clase.
 
+
+* ** URL video:** https://youtu.be/uOsNgHFTU0Q
